@@ -154,8 +154,8 @@ public:
     /// Display the list of GMs
     static bool HandleGMListFullCommand(ChatHandler* handler, const char* /*args*/)
     {
-        ///- Get the accounts with GM Level > 1
-        QueryResult result = LoginDatabase.Query("SELECT a.username, aa.gmlevel FROM account a, account_access aa WHERE a.id=aa.id AND aa.gmlevel > 1");
+        ///- Get the accounts with GM Level
+        QueryResult result = LoginDatabase.PQuery("SELECT a.username, aa.gmlevel FROM account a, account_access aa WHERE a.id=aa.id AND aa.gmlevel >= %u", SEC_GAMEMASTER);
         if (result)
         {
             handler->SendSysMessage(LANG_GMLIST);
@@ -163,7 +163,7 @@ public:
             ///- Cycle through them. Display username and GM level
             do
             {
-                Field *fields = result->Fetch();
+                Field* fields = result->Fetch();
                 const char* name = fields[0].GetCString();
                 uint8 security = fields[1].GetUInt8();
                 uint8 max = ((16 - strlen(name)) / 2);
@@ -234,7 +234,7 @@ public:
             handler->GetSession()->SendNotification(LANG_GM_ON);
             handler->GetSession()->GetPlayer()->UpdateTriggerVisibility();
 #ifdef _DEBUG_VMAPS
-            VMAP::IVMapManager *vMapManager = VMAP::VMapFactory::createOrGetVMapManager();
+            VMAP::IVMapManager* vMapManager = VMAP::VMapFactory::createOrGetVMapManager();
             vMapManager->processCommand("stoplog");
 #endif
             return true;
@@ -246,7 +246,7 @@ public:
             handler->GetSession()->SendNotification(LANG_GM_OFF);
             handler->GetSession()->GetPlayer()->UpdateTriggerVisibility();
 #ifdef _DEBUG_VMAPS
-            VMAP::IVMapManager *vMapManager = VMAP::VMapFactory::createOrGetVMapManager();
+            VMAP::IVMapManager* vMapManager = VMAP::VMapFactory::createOrGetVMapManager();
             vMapManager->processCommand("startlog");
 #endif
             return true;
