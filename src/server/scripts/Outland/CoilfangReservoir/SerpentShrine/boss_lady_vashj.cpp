@@ -282,7 +282,7 @@ public:
             if (!who || me->getVictim())
                 return;
 
-            if (who->isTargetableForAttack() && who->isInAccessiblePlaceFor(me) && me->IsHostileTo(who))
+            if (me->canCreatureAttack(who))
             {
                 float attackRadius = me->GetAttackDistance(who);
                 if (me->IsWithinDistInMap(who, attackRadius) && me->GetDistanceZ(who) <= CREATURE_Z_ATTACK_RANGE && me->IsWithinLOSInMap(who))
@@ -884,7 +884,7 @@ public:
 };
 
 //Coilfang Strider
-//It hits plate for about 8000 damage, has a Mind Blast spell doing about 3000 shadow damage, and a Psychic Scream Aura, which fears everybody in a 8 yard range of it every 2-3 seconds , for 5 seconds and increasing their movement speed by 150% during the fear.
+//It hits plate for about 8000 damage, has a Mind Blast spell doing about 3000 shadow damage, and a Psychic Scream Aura, which fears everybody in a 8 yard range of it every 2-3 seconds, for 5 seconds and increasing their movement speed by 150% during the fear.
 class mob_coilfang_strider : public CreatureScript
 {
 public:
@@ -992,7 +992,7 @@ public:
             {
                 uint32 identifier;
                 uint8 channel_identifier;
-                switch(gObj->GetEntry())
+                switch (gObj->GetEntry())
                 {
                     case 185052:
                         identifier = DATA_SHIELDGENERATOR1;

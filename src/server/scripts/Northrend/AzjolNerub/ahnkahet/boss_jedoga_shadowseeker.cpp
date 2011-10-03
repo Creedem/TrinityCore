@@ -184,7 +184,7 @@ public:
             if (pInstance->GetData(DATA_JEDOGA_SHADOWSEEKER_EVENT) != IN_PROGRESS || !bOnGround)
                 return;
 
-            if (!me->getVictim() && who->isTargetableForAttack() && me->IsHostileTo(who) && who->isInAccessiblePlaceFor(me))
+            if (!me->getVictim() && me->canCreatureAttack(who))
             {
                 float attackRadius = me->GetAttackDistance(who);
                 if (me->IsWithinDistInMap(who, attackRadius) && me->IsWithinLOSInMap(who))
@@ -440,7 +440,7 @@ public:
             if (uiType != POINT_MOTION_TYPE || !pInstance)
                 return;
 
-            switch(uiPointId)
+            switch (uiPointId)
             {
                 case 1:
                     {

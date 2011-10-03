@@ -213,6 +213,8 @@ bool MapManager::CanPlayerEnter(uint32 mapid, Player* player, bool loginCheck)
                 return false;
             }
             sLog->outDebug(LOG_FILTER_MAPS, "MAP: Player '%s' has corpse in instance '%s' and can enter.", player->GetName(), mapName);
+            player->ResurrectPlayer(0.5f, false);
+            player->SpawnCorpseBones();
         }
         else
             sLog->outDebug(LOG_FILTER_MAPS, "Map::CanPlayerEnter - player '%s' is dead but does not have a corpse!", player->GetName());
@@ -341,7 +343,7 @@ uint32 MapManager::GetNumInstances()
         Map* map = itr->second;
         if (!map->Instanceable())
             continue;
-        MapInstanced::InstancedMaps &maps = ((MapInstanced* )map)->GetInstancedMaps();
+        MapInstanced::InstancedMaps &maps = ((MapInstanced*)map)->GetInstancedMaps();
         for (MapInstanced::InstancedMaps::iterator mitr = maps.begin(); mitr != maps.end(); ++mitr)
             if (mitr->second->IsDungeon()) ret++;
     }
@@ -358,7 +360,7 @@ uint32 MapManager::GetNumPlayersInInstances()
         Map* map = itr->second;
         if (!map->Instanceable())
             continue;
-        MapInstanced::InstancedMaps &maps = ((MapInstanced* )map)->GetInstancedMaps();
+        MapInstanced::InstancedMaps &maps = ((MapInstanced*)map)->GetInstancedMaps();
         for (MapInstanced::InstancedMaps::iterator mitr = maps.begin(); mitr != maps.end(); ++mitr)
             if (mitr->second->IsDungeon())
                 ret += ((InstanceMap*)mitr->second)->GetPlayers().getSize();

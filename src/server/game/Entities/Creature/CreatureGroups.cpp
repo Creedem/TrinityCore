@@ -26,7 +26,10 @@
 
 CreatureGroupInfoType   CreatureGroupMap;
 
-void CreatureGroupManager::AddCreatureToGroup(uint32 groupId, Creature* member)
+namespace FormationMgr
+{
+
+void AddCreatureToGroup(uint32 groupId, Creature* member)
 {
     Map* map = member->FindMap();
     if (!map)
@@ -50,7 +53,7 @@ void CreatureGroupManager::AddCreatureToGroup(uint32 groupId, Creature* member)
     }
 }
 
-void CreatureGroupManager::RemoveCreatureFromGroup(CreatureGroup* group, Creature* member)
+void RemoveCreatureFromGroup(CreatureGroup* group, Creature* member)
 {
     sLog->outDebug(LOG_FILTER_UNITS, "Deleting member pointer to GUID: %u from group %u", group->GetId(), member->GetDBTableGUIDLow());
     group->RemoveMember(member);
@@ -67,7 +70,7 @@ void CreatureGroupManager::RemoveCreatureFromGroup(CreatureGroup* group, Creatur
     }
 }
 
-void CreatureGroupManager::LoadCreatureFormations()
+void LoadCreatureFormations()
 {
     uint32 oldMSTime = getMSTime();
 
@@ -151,6 +154,8 @@ void CreatureGroupManager::LoadCreatureFormations()
     sLog->outString();
 }
 
+} // Namespace
+
 void CreatureGroup::AddMember(Creature* member)
 {
     sLog->outDebug(LOG_FILTER_UNITS, "CreatureGroup::AddMember: Adding unit GUID: %u.", member->GetGUIDLow());
@@ -199,7 +204,7 @@ void CreatureGroup::MemberAttackStart(Creature* member, Unit* target)
         if (itr->first->getVictim())
             continue;
 
-        if (itr->first->canAttack(target) && itr->first->AI())
+        if (itr->first->IsValidAttackTarget(target) && itr->first->AI())
             itr->first->AI()->AttackStart(target);
     }
 }

@@ -19,6 +19,7 @@
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
 #include "SpellAuras.h"
+#include "GridNotifiers.h"
 #include "icecrown_citadel.h"
 
 // KNOWN BUGS:
@@ -459,7 +460,7 @@ class spell_rotface_ooze_flood : public SpellScriptLoader
 
             void Register()
             {
-                OnEffect += SpellEffectFn(spell_rotface_ooze_flood_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+                OnEffectHitTarget += SpellEffectFn(spell_rotface_ooze_flood_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
                 OnUnitTargetSelect += SpellUnitTargetFn(spell_rotface_ooze_flood_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENTRY);
             }
         };
@@ -489,7 +490,7 @@ class spell_rotface_mutated_infection : public SpellScriptLoader
             {
                 // remove targets with this aura already
                 // tank is not on this list
-                targets.remove_if(Trinity::UnitAuraCheck(true, GetSpellInfo()->Id));
+                targets.remove_if (Trinity::UnitAuraCheck(true, GetSpellInfo()->Id));
                 if (targets.empty())
                     return;
 
@@ -550,7 +551,7 @@ class spell_rotface_little_ooze_combine : public SpellScriptLoader
 
             void Register()
             {
-                OnEffect += SpellEffectFn(spell_rotface_little_ooze_combine_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+                OnEffectHitTarget += SpellEffectFn(spell_rotface_little_ooze_combine_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
             }
         };
 
@@ -596,7 +597,7 @@ class spell_rotface_large_ooze_combine : public SpellScriptLoader
 
             void Register()
             {
-                OnEffect += SpellEffectFn(spell_rotface_large_ooze_combine_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+                OnEffectHitTarget += SpellEffectFn(spell_rotface_large_ooze_combine_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
             }
         };
 
@@ -652,7 +653,7 @@ class spell_rotface_large_ooze_buff_combine : public SpellScriptLoader
 
             void Register()
             {
-                OnEffect += SpellEffectFn(spell_rotface_large_ooze_buff_combine_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
+                OnEffectHitTarget += SpellEffectFn(spell_rotface_large_ooze_buff_combine_SpellScript::HandleScript, EFFECT_0, SPELL_EFFECT_SCRIPT_EFFECT);
             }
         };
 
@@ -692,7 +693,7 @@ class spell_rotface_unstable_ooze_explosion_init : public SpellScriptLoader
 
             void Register()
             {
-                OnEffect += SpellEffectFn(spell_rotface_unstable_ooze_explosion_init_SpellScript::HandleCast, EFFECT_0, SPELL_EFFECT_FORCE_CAST);
+                OnEffectHitTarget += SpellEffectFn(spell_rotface_unstable_ooze_explosion_init_SpellScript::HandleCast, EFFECT_0, SPELL_EFFECT_FORCE_CAST);
             }
         };
 
@@ -729,7 +730,7 @@ class spell_rotface_unstable_ooze_explosion : public SpellScriptLoader
 
             void Register()
             {
-                OnEffect += SpellEffectFn(spell_rotface_unstable_ooze_explosion_SpellScript::CheckTarget, EFFECT_0, SPELL_EFFECT_TRIGGER_MISSILE);
+                OnEffectHit += SpellEffectFn(spell_rotface_unstable_ooze_explosion_SpellScript::CheckTarget, EFFECT_0, SPELL_EFFECT_TRIGGER_MISSILE);
             }
         };
 

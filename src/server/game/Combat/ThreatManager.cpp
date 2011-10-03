@@ -74,6 +74,10 @@ bool ThreatCalcHelper::isValidProcess(Unit* hatedUnit, Unit* hatingUnit, SpellIn
     if (!hatedUnit->isAlive() || !hatingUnit->isAlive())
         return false;
 
+    // not in same map or phase
+    if (!hatedUnit->IsInMap(hatingUnit))
+        return false;
+
     // spell not causing threat
     if (threatSpell && threatSpell->AttributesEx & SPELL_ATTR1_NO_THREAT)
         return false;
@@ -174,11 +178,13 @@ void HostileReference::updateOnlineStatus()
     // ref is valid
     // target is no player or not gamemaster
     // target is not in flight
-    if (isValid() &&
-        ((getTarget()->GetTypeId() != TYPEID_PLAYER || !getTarget()->ToPlayer()->isGameMaster()) ||
-        !getTarget()->HasUnitState(UNIT_STAT_IN_FLIGHT)))
+    if (isValid()
+        && (getTarget()->GetTypeId() != TYPEID_PLAYER || !getTarget()->ToPlayer()->isGameMaster())
+        && !getTarget()->HasUnitState(UNIT_STAT_IN_FLIGHT)
+        && getTarget()->IsInMap(getSourceUnit())
+        )
     {
-      Creature* creature = getSourceUnit()->ToCreature();
+        Creature* creature = getSourceUnit()->ToCreature();
         online = getTarget()->isInAccessiblePlaceFor(creature);
         if (!online)
         {
@@ -513,7 +519,7 @@ void ThreatManager::processThreatEvent(ThreatRefStatusChangeEvent* threatRefStat
 
     HostileReference* hostilRef = threatRefStatusChangeEvent->getReference();
 
-    switch(threatRefStatusChangeEvent->getType())
+    switch (threatRefStatusChangeEvent->getType())
     {
         case UEV_THREAT_REF_THREAT_CHANGE:
             if ((getCurrentVictim() == hostilRef && threatRefStatusChangeEvent->getFValue()<0.0f) ||
